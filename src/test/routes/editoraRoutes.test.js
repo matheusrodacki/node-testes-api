@@ -44,25 +44,28 @@ describe("POST em /editoras", () => {
 });
 
 describe("PUT em /editoras", () => {
-  it("Deve alterar o registro adicionado", async () => {
-    await request(app)
-      .put(`/editoras/${idResposta}`)
-      .send({
-        email: "contato@cdc.com",
-      })
-      .expect(204);
+  test.each([
+    ["nome", { nome: "ACD" }],
+    ["cidade", { cidade: "Mogi Guaçu" }],
+    ["email", { email: "contato@cdc.com" }],
+  ])(`Deve alterar o campo %s`, async (chave, param) => {
+    await request(app).put(`/editoras/${idResposta}`).send(param).expect(204);
   });
 });
 
-describe("GET em /editoras/id e ", () => {
-  it("Verifica se o registro foi alterado no PUT", async () => {
+describe("GET em /editoras/id", () => {
+  test.each([
+    ["nome", { nome: "ACD" }],
+    ["cidade", { cidade: "Mogi Guaçu" }],
+    ["email", { email: "contato@cdc.com" }],
+  ])(`Verifica se o campo %s foi alterado`, async (chave, param) => {
     const resposta = await request(app)
       .get(`/editoras/${idResposta}`)
       .set("Accept", "application/json")
       .expect("content-type", /json/)
       .expect(200);
 
-    expect(resposta.body.email).toEqual("contato@cdc.com");
+    expect(resposta.body.chave).toEqual(param.chave);
   });
 });
 
