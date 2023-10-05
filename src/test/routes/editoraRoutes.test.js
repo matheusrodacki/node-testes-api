@@ -38,6 +38,9 @@ describe("POST em /editoras", () => {
 
     idResposta = resposta.body.content.id;
   });
+  it("Deve não adicionar nada ao passar o body vazio", async () => {
+    await request(app).post("/editoras").send({}).expect(400);
+  });
 });
 
 describe("PUT em /editoras", () => {
