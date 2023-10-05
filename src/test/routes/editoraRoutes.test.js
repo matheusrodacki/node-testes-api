@@ -50,7 +50,7 @@ describe("PUT em /editoras", () => {
       .send({
         email: "contato@cdc.com",
       })
-      .expect(200);
+      .expect(204);
   });
 });
 
