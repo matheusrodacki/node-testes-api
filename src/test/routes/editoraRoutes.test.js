@@ -1,13 +1,15 @@
-/* eslint-disable no-undef */
-import app from "../../app.js";
 import request from "supertest";
+import { test, describe, expect, it, jest } from "@jest/globals";
+import app from "../../app.js";
 
 let server;
+// eslint-disable-next-line no-undef
 beforeEach(() => {
   const port = 3000;
   server = app.listen(port);
 });
 
+// eslint-disable-next-line no-undef
 afterEach(() => {
   server.close();
 });
@@ -43,13 +45,21 @@ describe("POST em /editoras", () => {
   });
 });
 
-describe("PUT em /editoras", () => {
+describe("PUT em /editoras/id", () => {
   test.each([
     ["nome", { nome: "ACD" }],
     ["cidade", { cidade: "Mogi Guaçu" }],
     ["email", { email: "contato@cdc.com" }],
   ])(`Deve alterar o campo %s`, async (chave, param) => {
-    await request(app).put(`/editoras/${idResposta}`).send(param).expect(204);
+    const requisicao = { request };
+    const spy = jest.spyOn(requisicao, "request");
+    await requisicao
+      .request(app)
+      .put(`/editoras/${idResposta}`)
+      .send(param)
+      .expect(204);
+
+    expect(spy).toHaveBeenCalled();
   });
 });
 
